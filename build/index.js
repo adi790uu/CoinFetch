@@ -2,9 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import initializeDB from "./core/db.js";
 import task from "./core/jobs/crypto-job.js";
+import router from "./router/crypto-router.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use("/api", router);
 app.get("/", async (req, res) => {
     res.json({ success: true, message: "Welcome to CoinFetch!" });
 });
