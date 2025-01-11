@@ -11,20 +11,25 @@ export const getCryptoData = async (cryptoName: string) => {
 };
 
 export const getDeviationInCryptoData = async (cryptoName: string) => {
-  const listOfStats = await getListOfCryptoDataByName(cryptoName, 100);
+  try {
+    const listOfStats = await getListOfCryptoDataByName(cryptoName, 100);
 
-  if (!listOfStats) {
-    return null;
+    if (!listOfStats) {
+      return null;
+    }
+    const prices = listOfStats?.map((stat) => stat.priceUsd);
+    const mean = prices?.reduce((acc, val) => acc + val, 0) / prices.length;
+
+    const deviation = Math.sqrt(
+      prices?.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) /
+        prices.length
+    );
+
+    return deviation;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
-  const prices = listOfStats?.map((stat) => stat.priceUsd);
-  const mean = prices?.reduce((acc, val) => acc + val, 0) / prices.length;
-
-  const deviation = Math.sqrt(
-    prices?.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) /
-      prices.length
-  );
-
-  return deviation;
 };
 
 export const addCryptoData = async (cryptoData: CryptoDataInput) => {
