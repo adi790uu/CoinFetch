@@ -4,6 +4,6 @@ import { getStat, getDeviation } from "../controllers/crypto-controller.js";
 const router = express.Router();
 
 router.post("/stats", getStat);
-router.get("/deviation", getDeviation);
+router.post("/deviation", getDeviation);
 
 export default router;

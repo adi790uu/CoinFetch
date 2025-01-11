@@ -11,7 +11,6 @@ const cryptoDataSchema = new Schema<ICryptoData>(
     name: {
       type: String,
       required: true,
-      unique: true,
       index: true,
     },
     priceUsd: {
@@ -53,7 +52,7 @@ export const insertCryptoData = async (
   }
 };
 
-export const getCryptoDataByName = async (
+export const getLatestCryptoDataByName = async (
   name: string
 ): Promise<CryptoDataResult | null> => {
   try {
@@ -70,6 +69,28 @@ export const getCryptoDataByName = async (
       marketCap: cryptoData.marketCapUsd,
       change24h: cryptoData.change24h,
     };
+  } catch (error) {
+    console.error("Error getting crypto data:", error);
+    throw error;
+  }
+};
+
+export const getListOfCryptoDataByName = async (
+  name: string,
+  limit: number
+) => {
+  try {
+    const cryptoDataList = await CryptoData.find({ name: name })
+      .sort({
+        createdAt: -1,
+      })
+      .limit(limit);
+
+    if (!cryptoDataList) {
+      return null;
+    }
+
+    return cryptoDataList;
   } catch (error) {
     console.error("Error getting crypto data:", error);
     throw error;

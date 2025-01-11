@@ -20,7 +20,6 @@ const task = cron.schedule(
         };
         await addCryptoData(insertCrypto);
       }
-      console.log("Coin data added successfully!");
     } catch (error) {
       console.error("Error occurred in crypto-job.");
     }
